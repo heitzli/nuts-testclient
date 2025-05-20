@@ -3,9 +3,12 @@ ARG S6_OVERLAY_VERSION=3.1.5.0
 
 RUN useradd -m -d /home/user -s /bin/bash user
 RUN mkdir -p /run/sshd && \
+    apt-get update && \
+    apt-get install -y sudo && \
     usermod -aG sudo user && \
-    echo "user ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d && \
-    chmod 0440 /etc/sudoers.d 
+    mkdir -p /etc/sudoers.d && \
+    echo "user ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/user && \
+    chmod 0440 /etc/sudoers.d/user
 ENV ADMIN_PASSWORD="user"
 
 ENV DEBIAN_FRONTEND=noninteractive
