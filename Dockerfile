@@ -1,8 +1,11 @@
 FROM ubuntu
 ARG S6_OVERLAY_VERSION=3.1.5.0
 
+RUN useradd -m -d /home/user -s /bin/bash user
 RUN mkdir -p /run/sshd && \
-    useradd -rm -d /home/user -s /bin/bash -g root -G sudo -u 1001 user 
+    usermod -aG sudo user && \
+    echo "user ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d && \
+    chmod 0440 /etc/sudoers.d 
 ENV ADMIN_PASSWORD="user"
 
 ENV DEBIAN_FRONTEND=noninteractive
