@@ -3,7 +3,7 @@ ARG S6_OVERLAY_VERSION=3.1.5.0
 
 RUN mkdir -p /run/sshd && \
     useradd -rm -d /home/user -s /bin/bash -g root -G sudo -u 1001 user 
-ENV ADMIN_PASSWORD=""
+ENV ADMIN_PASSWORD="user"
 
 ENV DEBIAN_FRONTEND=noninteractive
 
