@@ -2,7 +2,7 @@ FROM ubuntu
 ARG S6_OVERLAY_VERSION=3.1.5.0
 
 RUN mkdir -p /run/sshd && \
-    useradd -rm -d /home/admin -s /bin/bash -g root -G sudo -u 1001 admin 
+    useradd -rm -d /home/user -s /bin/bash -g root -G sudo -u 1001 user 
 ENV ADMIN_PASSWORD=""
 
 ENV DEBIAN_FRONTEND=noninteractive
@@ -29,6 +29,7 @@ RUN apt-get update && apt-get install -y \
     isc-dhcp-client \
     apache2 \
     traceroute \
+    git \
     #netcat \
     openssh-server \
     snmp \
@@ -39,6 +40,14 @@ RUN apt-get update && apt-get install -y \
     dsniff \
     ethtool \
     fping 
+
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
+RUN git clone https://github.com/heitzli/arp-spoofing.git /home/user/arp-spoofing
+#RUN cp /home/user/arp-spoofing/spoofer.py /home/user
+#RUN rm -rf arp-spoofing
+WORKDIR /home/user/arp-spoofing
+RUN uv sync
+WORKDIR /
 
 RUN curl -sSL https://github.com/just-containers/s6-overlay/releases/download/v${S6_OVERLAY_VERSION}/s6-overlay-noarch.tar.xz | tar -Jxpf - -C /  && \
     curl -sSL https://github.com/just-containers/s6-overlay/releases/download/v${S6_OVERLAY_VERSION}/s6-overlay-i686.tar.xz | tar -Jxpf - -C /
