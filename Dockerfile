@@ -1,15 +1,15 @@
 FROM ubuntu
 ARG S6_OVERLAY_VERSION=3.1.5.0
 
-RUN useradd -m -d /home/user -s /bin/bash user
+RUN useradd -m -d /home/admin -s /bin/bash admin
 RUN mkdir -p /run/sshd && \
     apt-get update && \
     apt-get install -y sudo && \
-    usermod -aG sudo user && \
+    usermod -aG sudo admin && \
     mkdir -p /etc/sudoers.d && \
-    echo "user ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/user && \
-    chmod 0440 /etc/sudoers.d/user
-ENV ADMIN_PASSWORD="user"
+    echo "admin ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/admin && \
+    chmod 0440 /etc/sudoers.d/admin
+ENV ADMIN_PASSWORD="admin"
 
 ENV DEBIAN_FRONTEND=noninteractive
 
@@ -48,10 +48,10 @@ RUN apt-get update && apt-get install -y \
     fping 
 
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
-RUN git clone https://github.com/heitzli/arp-spoofing.git /home/user/arp-spoofing
-#RUN cp /home/user/arp-spoofing/spoofer.py /home/user
+RUN git clone https://github.com/heitzli/arp-spoofing.git /home/admin/arp-spoofing
+#RUN cp /home/admin/arp-spoofing/spoofer.py /home/admin
 #RUN rm -rf arp-spoofing
-WORKDIR /home/user/arp-spoofing
+WORKDIR /home/admin/arp-spoofing
 RUN uv sync
 WORKDIR /
 
