@@ -47,14 +47,6 @@ RUN apt-get update && apt-get install -y \
     ethtool \
     fping 
 
-COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
-RUN git clone https://github.com/heitzli/arp-spoofing.git /home/admin/arp-spoofing
-#RUN cp /home/admin/arp-spoofing/spoofer.py /home/admin
-#RUN rm -rf arp-spoofing
-WORKDIR /home/admin/arp-spoofing
-RUN uv sync
-WORKDIR /
-
 RUN curl -sSL https://github.com/just-containers/s6-overlay/releases/download/v${S6_OVERLAY_VERSION}/s6-overlay-noarch.tar.xz | tar -Jxpf - -C /  && \
     curl -sSL https://github.com/just-containers/s6-overlay/releases/download/v${S6_OVERLAY_VERSION}/s6-overlay-i686.tar.xz | tar -Jxpf - -C /
 ADD s6-rc.d /etc/s6-overlay/s6-rc.d
